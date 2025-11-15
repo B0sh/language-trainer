@@ -21,7 +21,7 @@ import { DateTrainer } from "./date-trainer/DateTrainer";
 
 export const LanguageTrainerApp: React.FC = () => {
     const [open, setOpen] = useState(true);
-    const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
+    const [selectedMenu, setSelectedMenu] = useState<string | null>(localStorage.getItem("selectedMenu") ?? "home");
     const errorBoundaryRef = createRef<ErrorBoundary>();
 
     const [settings, setSettings] = useState<AppSettings>(() => SettingsService.loadSettings());
@@ -42,14 +42,6 @@ export const LanguageTrainerApp: React.FC = () => {
         errorBoundaryRef.current?.resetErrorBoundary();
     };
 
-    useEffect(() => {
-        const storedMenu = localStorage.getItem("selectedMenu");
-        if (storedMenu) {
-            setSelectedMenu(storedMenu);
-        } else {
-            setSelectedMenu("home");
-        }
-    }, []);
 
     useEffect(() => {
         if (selectedMenu) {

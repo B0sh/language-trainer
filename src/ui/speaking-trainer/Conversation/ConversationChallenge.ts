@@ -77,7 +77,7 @@ export class ConversationChallenge {
         try {
             const analysisData = JSON.parse(result.response);
             return analysisData;
-        } catch (error) {
+        } catch {
             throw new Error("Failed to generate analysis: Invalid response format");
         }
     }

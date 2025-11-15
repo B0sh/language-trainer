@@ -6,7 +6,6 @@ import {
     TTSRequest,
     LLMChatRequest,
     LLMChatResult,
-    LLMChatMessage,
 } from "../interfaces";
 import { GoogleTTSAudio } from "./GoogleTTSAudio";
 import { GoogleGenerativeAI, ModelParams } from "@google/generative-ai";

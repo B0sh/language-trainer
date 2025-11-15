@@ -1,41 +1,50 @@
-import { defineConfig } from "eslint/config";
-import { fixupConfigRules } from "@eslint/compat";
-import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import reactHooks from "eslint-plugin-react-hooks";
+import importPlugin from "eslint-plugin-import";
+import globals from "globals";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default defineConfig([{
-    extends: fixupConfigRules(compat.extends(
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react-hooks/recommended",
-        "plugin:import/recommended",
-        "plugin:import/electron",
-        "plugin:import/typescript",
-    )),
-
+export default [
+  js.configs.recommended,
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    ignores: ["dist/**/*", "node_modules/**/*"],
     languageOptions: {
-        globals: {
-            ...globals.browser,
-            ...globals.node,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+      parser: tsparser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
         },
-
-        parser: tsParser,
+      },
     },
-
+    plugins: {
+      "@typescript-eslint": tseslint,
+      "react-hooks": reactHooks,
+      "import": importPlugin,
+    },
+    settings: {
+      "import/resolver": {
+        typescript: true,
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
+        },
+      },
+    },
     rules: {
-        "@typescript-eslint/no-inferrable-types": "off",
+      ...tseslint.configs.recommended.rules,
+      ...reactHooks.configs.recommended.rules,
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "import/no-unresolved": ["error", {
+        ignore: ["^@vitejs/", "^vite"]
+      }],
     },
-}]);
+  },
+];
