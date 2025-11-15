@@ -5,7 +5,7 @@ import { getTargetLanguage } from "../../../shared/languages";
 import { MessageInput } from "./MessageInput";
 import type SlTextareaElement from "@shoelace-style/shoelace/dist/components/textarea/textarea";
 import "./AIConversation.css";
-import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
+import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js";
 import { ConversationChallenge } from "./ConversationChallenge";
 import { AIProviderRegistry } from "../../../ai/registry";
 import { useErrorBoundary } from "react-error-boundary";

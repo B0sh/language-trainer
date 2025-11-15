@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import SlInput from "@shoelace-style/shoelace/dist/react/input";
+import SlInput from "@shoelace-style/shoelace/dist/react/input/index.js";
 import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/input";
 import { useKeypress } from "../../shared/useKeypress";
 import { DateChallengeRound } from "./DateChallenge";

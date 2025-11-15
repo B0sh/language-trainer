@@ -1,8 +1,8 @@
-import SlDrawer from "@shoelace-style/shoelace/dist/react/drawer";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
-import SlDivider from "@shoelace-style/shoelace/dist/react/divider";
+import SlDrawer from "@shoelace-style/shoelace/dist/react/drawer/index.js";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button/index.js";
+import SlDivider from "@shoelace-style/shoelace/dist/react/divider/index.js";
 import * as React from "react";
 import { useState, useEffect, createRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { AppSettings } from "../../models/app-settings";
-import SlInput from "@shoelace-style/shoelace/dist/react/input";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
-import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip";
+import SlInput from "@shoelace-style/shoelace/dist/react/input/index.js";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button/index.js";
+import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js";
 import { openUrl } from "../../shared/utility";
 
 interface OpenAISettingsProps {

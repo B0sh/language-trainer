@@ -1,7 +1,7 @@
 import React from "react";
 import { AI_REQUEST_TYPE, AIRequestLog } from "../../ai/db";
 import { AppSettings } from "../../models/app-settings";
-import SlFormatDate from "@shoelace-style/shoelace/dist/react/format-date";
+import SlFormatDate from "@shoelace-style/shoelace/dist/react/format-date/index.js";
 import "./AiLogDetail.css";
 
 interface Props {

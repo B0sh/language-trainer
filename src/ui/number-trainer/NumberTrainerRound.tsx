@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import SlInput from "@shoelace-style/shoelace/dist/react/input";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
+import SlInput from "@shoelace-style/shoelace/dist/react/input/index.js";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
 import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/input";
 import { AnimatedSoundwave } from "../shared/AnimatedSoundwave";
 import { PlaybackIcon } from "../shared/PlaybackIcon";

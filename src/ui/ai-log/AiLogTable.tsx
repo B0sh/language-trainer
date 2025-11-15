@@ -1,6 +1,6 @@
 import React from "react";
 import { AI_REQUEST_TYPE, AIRequestLog } from "../../ai/db";
-import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time";
+import SlRelativeTime from "@shoelace-style/shoelace/dist/react/relative-time/index.js";
 import { AppSettings } from "../../models/app-settings";
 import "./AiLogTable.css";
 

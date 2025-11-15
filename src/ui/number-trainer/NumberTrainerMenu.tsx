@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
-import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group";
-import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button";
-import SlSwitch from "@shoelace-style/shoelace/dist/react/switch";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
+import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group/index.js";
+import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button/index.js";
+import SlSwitch from "@shoelace-style/shoelace/dist/react/switch/index.js";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button/index.js";
 import type SlSwitchElement from "@shoelace-style/shoelace/dist/components/switch/switch";
 import { AppSettings } from "../../models/app-settings";
 import { getTargetLanguage } from "../../shared/languages";

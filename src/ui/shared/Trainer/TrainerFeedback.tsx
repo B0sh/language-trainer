@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlAlert from "@shoelace-style/shoelace/dist/react/alert";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlAlert from "@shoelace-style/shoelace/dist/react/alert/index.js";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
 import { useKeypress } from "../../../shared/useKeypress";
 
 interface Props {

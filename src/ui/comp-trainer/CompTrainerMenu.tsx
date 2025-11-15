@@ -1,6 +1,6 @@
 import * as React from "react";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
 import { AppSettings } from "../../models/app-settings";
 import { getTargetLanguage } from "../../shared/languages";
 

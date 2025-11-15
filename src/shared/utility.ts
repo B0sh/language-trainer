@@ -1,5 +1,5 @@
 export function openUrl(url: string) {
-    window.electron.ipcRenderer.invoke("open-external-url", url);
+    window.open(url, "_blank");
 }
 
 export async function sleep(ms: number) {

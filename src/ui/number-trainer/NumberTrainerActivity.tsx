@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { NumberChallenge, NumberChallengeRoundConfig } from "./NumberChallenge";
 import { NumberTrainerRound } from "./NumberTrainerRound";
 import { TrainerFeedback } from "../shared/Trainer/TrainerFeedback";
-import SlFormatNumber from "@shoelace-style/shoelace/dist/react/format-number";
+import SlFormatNumber from "@shoelace-style/shoelace/dist/react/format-number/index.js";
 import { AppSettings } from "../../models/app-settings";
 import { AIProviderRegistry } from "../../ai/registry";
 import { useErrorBoundary } from "react-error-boundary";

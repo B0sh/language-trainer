@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import SlDialog from "@shoelace-style/shoelace/dist/react/dialog";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlInput from "@shoelace-style/shoelace/dist/react/input";
-import SlFormatNumber from "@shoelace-style/shoelace/dist/react/format-number";
+import SlDialog from "@shoelace-style/shoelace/dist/react/dialog/index.js";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlInput from "@shoelace-style/shoelace/dist/react/input/index.js";
+import SlFormatNumber from "@shoelace-style/shoelace/dist/react/format-number/index.js";
 import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/input";
 import { AppSettings } from "../../models/app-settings";
 import { NumberChallengeRoundConfig } from "./NumberChallenge";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import SlProgress from "@shoelace-style/shoelace/dist/react/progress";
+// import SlProgress from "@shoelace-style/shoelace/dist/react/progress/index.js";
 import "./AnimatedProgress.css";
 
 interface AnimatedProgressProps extends React.HTMLProps<HTMLProgressElement> {

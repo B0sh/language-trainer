@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { diff_match_patch, Diff } from "diff-match-patch";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
 import "./TextDiff.css";
 
 interface Props {

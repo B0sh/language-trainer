@@ -1,6 +1,6 @@
 import * as React from "react";
-import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
+import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button/index.js";
 import { useState } from "react";
 import { LLMChatMessage } from "../../../ai/interfaces";
 import { ConversationAnalysis } from "../../../ai/prompts/conversation-prompts";

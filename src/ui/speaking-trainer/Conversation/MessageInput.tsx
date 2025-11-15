@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useKeypress } from "../../../shared/useKeypress";
-import SlTextarea from "@shoelace-style/shoelace/dist/react/textarea";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
+import SlTextarea from "@shoelace-style/shoelace/dist/react/textarea/index.js";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
 import type SlTextareaElement from "@shoelace-style/shoelace/dist/components/textarea/textarea";
 
 interface MessageInputProps {

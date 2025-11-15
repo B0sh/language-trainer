@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { AppSettings } from "../../models/app-settings";
-import SlSelect from "@shoelace-style/shoelace/dist/react/select";
-import SlOption from "@shoelace-style/shoelace/dist/react/option";
+import SlSelect from "@shoelace-style/shoelace/dist/react/select/index.js";
+import SlOption from "@shoelace-style/shoelace/dist/react/option/index.js";
 
 interface Props {
     settings: AppSettings;

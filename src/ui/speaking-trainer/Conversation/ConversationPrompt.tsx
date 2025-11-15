@@ -1,9 +1,9 @@
 import * as React from "react";
-import SlDialog from "@shoelace-style/shoelace/dist/react/dialog";
-import SlInput from "@shoelace-style/shoelace/dist/react/input";
-import SlButton from "@shoelace-style/shoelace/dist/react/button";
-import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip";
-import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button";
+import SlDialog from "@shoelace-style/shoelace/dist/react/dialog/index.js";
+import SlInput from "@shoelace-style/shoelace/dist/react/input/index.js";
+import SlButton from "@shoelace-style/shoelace/dist/react/button/index.js";
+import SlTooltip from "@shoelace-style/shoelace/dist/react/tooltip/index.js";
+import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button/index.js";
 import type SlInputElement from "@shoelace-style/shoelace/dist/components/input/input";
 import { AppSettings } from "../../../models/app-settings";
 import { getTargetLanguage } from "../../../shared/languages";

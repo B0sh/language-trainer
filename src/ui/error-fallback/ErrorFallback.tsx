@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FallbackProps } from "react-error-boundary";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
 import "./ErrorFallback.css";
 
 export const ErrorFallback = ({ error }: FallbackProps) => {

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import SlTextarea from "@shoelace-style/shoelace/dist/react/textarea";
-import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
+import SlTextarea from "@shoelace-style/shoelace/dist/react/textarea/index.js";
+import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js";
 import type SlTextareaElement from "@shoelace-style/shoelace/dist/components/textarea/textarea";
 import { useKeypress } from "../../shared/useKeypress";
 import { AnimatedProgress } from "../shared/AnimatedProgress";

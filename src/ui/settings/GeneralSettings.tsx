@@ -1,8 +1,8 @@
 import * as React from "react";
 import { AppSettings } from "../../models/app-settings";
-import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group";
-import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button";
-import SlRange from "@shoelace-style/shoelace/dist/react/range";
+import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group/index.js";
+import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button/index.js";
+import SlRange from "@shoelace-style/shoelace/dist/react/range/index.js";
 import { APP_LANGUAGES } from "../../shared/languages";
 
 interface GeneralSettingsProps {

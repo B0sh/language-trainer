@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
-import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
+import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js";
 import { LLMChatMessage } from "../../../ai/interfaces";
 import { ConversationAnalysis } from "../../../ai/prompts/conversation-prompts";
 import { Message } from "./Message";

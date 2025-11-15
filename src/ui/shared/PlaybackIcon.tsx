@@ -1,6 +1,6 @@
 import React from "react";
-import SlIcon from "@shoelace-style/shoelace/dist/react/icon";
-import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
+import SlIcon from "@shoelace-style/shoelace/dist/react/icon/index.js";
+import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js";
 import { AnimatedSoundwave } from "./AnimatedSoundwave";
 
 export interface Props {

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { AppSettings, TargetLanguageLevel } from "../../models/app-settings";
-import SlSelect from "@shoelace-style/shoelace/dist/react/select";
-import SlOption from "@shoelace-style/shoelace/dist/react/option";
-import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group";
-import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button";
+import SlSelect from "@shoelace-style/shoelace/dist/react/select/index.js";
+import SlOption from "@shoelace-style/shoelace/dist/react/option/index.js";
+import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group/index.js";
+import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button/index.js";
 import { TARGET_LANGUAGES } from "../../shared/languages";
 
 interface Props {

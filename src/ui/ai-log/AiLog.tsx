@@ -1,10 +1,10 @@
 import { SlButton } from "@shoelace-style/shoelace/dist/react";
 import React, { useEffect, useState } from "react";
 import { aiRequestDB, AIRequestLog } from "../../ai/db";
-import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner";
-import SlBreadcrumb from "@shoelace-style/shoelace/dist/react/breadcrumb";
-import SlBreadcrumbItem from "@shoelace-style/shoelace/dist/react/breadcrumb-item";
-import SlDialog from "@shoelace-style/shoelace/dist/react/dialog";
+import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js";
+import SlBreadcrumb from "@shoelace-style/shoelace/dist/react/breadcrumb/index.js";
+import SlBreadcrumbItem from "@shoelace-style/shoelace/dist/react/breadcrumb-item/index.js";
+import SlDialog from "@shoelace-style/shoelace/dist/react/dialog/index.js";
 import { AppSettings } from "../../models/app-settings";
 import { AiLogTable } from "./AiLogTable";
 import { AiLogDetail } from "./AiLogDetail";

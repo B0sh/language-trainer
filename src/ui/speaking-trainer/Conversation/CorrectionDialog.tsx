@@ -1,5 +1,5 @@
 import React from "react";
-import SlDialog from "@shoelace-style/shoelace/dist/react/dialog";
+import SlDialog from "@shoelace-style/shoelace/dist/react/dialog/index.js";
 import { TextDiff } from "../../shared/TextDiff";
 
 interface Props {

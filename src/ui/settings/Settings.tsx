@@ -1,5 +1,5 @@
 import * as React from "react";
-import SlDivider from "@shoelace-style/shoelace/dist/react/divider";
+import SlDivider from "@shoelace-style/shoelace/dist/react/divider/index.js";
 import { AppSettings } from "../../models/app-settings";
 import { GeneralSettings } from "./GeneralSettings";
 import { LanguageSettings } from "./LanguageSettings";
