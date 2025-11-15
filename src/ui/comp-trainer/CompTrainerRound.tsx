@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import SlTextarea from "@shoelace-style/shoelace/dist/react/textarea/index.js";
 import SlSpinner from "@shoelace-style/shoelace/dist/react/spinner/index.js";
 import type SlTextareaElement from "@shoelace-style/shoelace/dist/components/textarea/textarea";
@@ -27,7 +27,9 @@ export const CompTrainerRound: React.FC<Props> = ({ playbackStatus, status, dura
         }
     });
 
-    inputRef.current?.focus();
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
     if (playbackStatus === "loading" || status === "evaluating") {
         return <SlSpinner className="large-spinner" />;

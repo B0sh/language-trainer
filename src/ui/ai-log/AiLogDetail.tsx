@@ -27,7 +27,6 @@ export const AiLogDetail: React.FC<Props> = ({ log, settings }) => {
         } catch {
             return content;
         }
-        return content;
     };
 
     return (

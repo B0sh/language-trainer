@@ -8,19 +8,22 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "lint": "eslint --ext .ts,.tsx ."
+        "lint": "eslint ."
     },
     "devDependencies": {
-        "@types/react": "^19.0.7",
-        "@types/react-dom": "^19.0.3",
-        "@typescript-eslint/eslint-plugin": "^5.62.0",
-        "@typescript-eslint/parser": "^5.62.0",
-        "@vitejs/plugin-react": "^4.2.1",
-        "eslint": "^8.57.1",
-        "eslint-plugin-import": "^2.31.0",
-        "eslint-plugin-react-hooks": "^5.1.0",
-        "typescript": "~4.5.4",
-        "vite": "^5.1.4",
+        "@eslint/js": "^9.39.1",
+        "@types/react": "^19.2.5",
+        "@types/react-dom": "^19.2.3",
+        "@typescript-eslint/eslint-plugin": "^8.46.4",
+        "@typescript-eslint/parser": "^8.46.4",
+        "@vitejs/plugin-react": "^5.1.1",
+        "eslint": "^9.39.1",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-react-hooks": "^7.0.1",
+        "eslint-plugin-react-refresh": "^0.4.14",
+        "globals": "^15.14.0",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.2",
         "vite-plugin-static-copy": "^3.1.4"
     },
     "keywords": [],
@@ -30,14 +33,15 @@
     },
     "license": "MIT",
     "dependencies": {
-        "@google/generative-ai": "^0.21.0",
-        "@shoelace-style/shoelace": "^2.19.1",
+        "@eslint/compat": "^2.0.0",
+        "@google/generative-ai": "^0.24.1",
+        "@shoelace-style/shoelace": "^2.20.1",
         "@types/diff-match-patch": "^1.0.36",
         "diff-match-patch": "^1.0.5",
-        "ollama": "^0.5.12",
-        "openai": "^4.80.1",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "react-error-boundary": "^5.0.0"
+        "ollama": "^0.6.3",
+        "openai": "^6.9.0",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-error-boundary": "^6.0.0"
     }
 }
