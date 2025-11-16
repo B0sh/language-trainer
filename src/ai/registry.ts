@@ -13,6 +13,7 @@ import { OpenAIProvider } from "./openai/OpenAIProvider";
 import { GoogleProvider } from "./google/GoogleProvider";
 import { LlamaProvider } from "./llama/LlamaProvider";
 import { OpenRouterProvider } from "./openrouter/OpenRouterProvider";
+import { WaldensWorldProvider } from "./waldensworld/WaldensWorldProvider";
 import { aiRequestDB } from "./db";
 
 type AiProviderFactory = new (...args: any[]) => AIProvider;
@@ -30,6 +31,7 @@ export class AIProviderRegistry {
         this.registerProvider("google", GoogleProvider);
         this.registerProvider("llama", LlamaProvider);
         this.registerProvider("openrouter", OpenRouterProvider);
+        this.registerProvider("waldensworld", WaldensWorldProvider);
     }
 
     static registerProvider(id: string, providerClass: AiProviderFactory) {

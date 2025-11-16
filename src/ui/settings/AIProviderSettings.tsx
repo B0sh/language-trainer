@@ -12,6 +12,7 @@ import { LlamaSettings } from "./LlamaSettings";
 import { GoogleSettings } from "./GoogleSettings";
 import { OpenAISettings } from "./OpenAISettings";
 import { OpenRouterSettings } from "./OpenRouterSettings";
+import { WaldensWorldSettings } from "./WaldensWorldSettings";
 
 interface AIProviderSettingsProps {
     settings: AppSettings;
@@ -134,6 +135,13 @@ export const AIProviderSettings: React.FC<AIProviderSettingsProps> = ({ settings
                 <>
                     <SlDivider />
                     <OpenRouterSettings settings={settings} onSettingsChange={onSettingsChange} />
+                </>
+            ) : null}
+
+            {settings.tts === "waldensworld" || settings.llm === "waldensworld" ? (
+                <>
+                    <SlDivider />
+                    <WaldensWorldSettings settings={settings} onSettingsChange={onSettingsChange} />
                 </>
             ) : null}
         </div>

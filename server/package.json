@@ -1,0 +1,22 @@
+{
+  "name": "language-trainer-proxy",
+  "version": "1.0.0",
+  "description": "Walden's AI Language Trainer Proxy Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "node-fetch": "^3.3.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "author": "Walden",
+  "license": "MIT"
+}
