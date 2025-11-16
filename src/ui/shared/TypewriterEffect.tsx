@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 interface Props {
     text: string;
 }
 
 export const TypewriterEffect: React.FC<Props> = ({ text }) => {
-    const [display, setDisplay] = useState("");
+    const [display, setDisplay] = useState(" ");
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    useEffect(() => {
-        setDisplay("");
-        setCurrentIndex(0);
-    }, [text]);
+    const [prevText, setPrevText] = useState(text);
+    if (text !== prevText) {
+      setPrevText(text);
+      setCurrentIndex(1);
+      setDisplay(text.slice(0, 1));
+    }
 
     useEffect(() => {
         if (currentIndex < text.length) {

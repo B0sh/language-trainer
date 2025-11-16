@@ -9,14 +9,9 @@ interface Props {
 }
 
 export const TextDiff: React.FC<Props> = React.memo(({ before, after }) => {
-    const [diffs, setDiffs] = useState<Diff[]>([]);
-
-    useEffect(() => {
-        const dmp = new diff_match_patch();
-        const diff = dmp.diff_main(before, after);
-        dmp.diff_cleanupSemantic(diff);
-        setDiffs(diff);
-    }, [before, after]);
+    const dmp = new diff_match_patch();
+    const diffs = dmp.diff_main(before, after);
+    dmp.diff_cleanupSemantic(diffs);
 
     return (
         <>

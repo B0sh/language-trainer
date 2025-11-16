@@ -5,7 +5,7 @@ import SlRadioGroup from "@shoelace-style/shoelace/dist/react/radio-group/index.
 import SlRadioButton from "@shoelace-style/shoelace/dist/react/radio-button/index.js";
 import SlSwitch from "@shoelace-style/shoelace/dist/react/switch/index.js";
 import SlIconButton from "@shoelace-style/shoelace/dist/react/icon-button/index.js";
-import type SlSwitchElement from "@shoelace-style/shoelace/dist/components/switch/switch";
+import type SlSwitchElement from "@shoelace-style/shoelace/dist/components/switch/switch.js";
 import { AppSettings } from "../../models/app-settings";
 import { getTargetLanguage } from "../../shared/languages";
 import { NUMBER_CHALLENGE_DEFAULT_DIFFICULTY } from "./NumberChallengeDefaults";

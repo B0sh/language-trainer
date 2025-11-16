@@ -1,48 +1,62 @@
 {
-    "name": "language-trainer",
-    "productName": "Walden's AI Language Trainer",
-    "version": "0.1.0",
-    "description": "Walden's very quite unique and special Language Trainer with Artificial Intelligence added for fun",
-    "type": "module",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview",
-        "lint": "eslint ."
-    },
-    "devDependencies": {
-        "@eslint/js": "^9.39.1",
-        "@types/react": "^19.2.5",
-        "@types/react-dom": "^19.2.3",
-        "@typescript-eslint/eslint-plugin": "^8.46.4",
-        "@typescript-eslint/parser": "^8.46.4",
-        "@vitejs/plugin-react": "^5.1.1",
-        "eslint": "^9.39.1",
-        "eslint-import-resolver-typescript": "^4.4.4",
-        "eslint-plugin-import": "^2.32.0",
-        "eslint-plugin-react-hooks": "^7.0.1",
-        "eslint-plugin-react-refresh": "^0.4.14",
-        "globals": "^15.14.0",
-        "typescript": "^5.9.3",
-        "vite": "^7.2.2",
-        "vite-plugin-static-copy": "^3.1.4"
-    },
-    "keywords": [],
-    "author": {
-        "name": "Walden Perry",
-        "email": "b0shbbl@hotmail.com"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "@eslint/compat": "^2.0.0",
-        "@google/generative-ai": "^0.24.1",
-        "@shoelace-style/shoelace": "^2.20.1",
-        "@types/diff-match-patch": "^1.0.36",
-        "diff-match-patch": "^1.0.5",
-        "ollama": "^0.6.3",
-        "openai": "^6.9.0",
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0",
-        "react-error-boundary": "^6.0.0"
-    }
+  "name": "language-trainer",
+  "productName": "Walden's AI Language Trainer",
+  "version": "0.1.0",
+  "description": "Walden's very quite unique and special Language Trainer with Artificial Intelligence added for fun",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^4.1.2",
+    "@eslint/js": "^9.39.1",
+    "@storybook/addon-a11y": "^10.0.7",
+    "@storybook/addon-docs": "^10.0.7",
+    "@storybook/addon-onboarding": "^10.0.7",
+    "@storybook/addon-vitest": "^10.0.7",
+    "@storybook/react-vite": "^10.0.7",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
+    "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/browser-playwright": "^4.0.9",
+    "@vitest/coverage-v8": "^4.0.9",
+    "eslint": "^9.39.1",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "eslint-plugin-storybook": "^10.0.7",
+    "globals": "^15.14.0",
+    "playwright": "^1.56.1",
+    "storybook": "^10.0.7",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.2",
+    "vite-plugin-static-copy": "^3.1.4",
+    "vitest": "^4.0.9"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Walden Perry",
+    "email": "b0shbbl@hotmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@eslint/compat": "^2.0.0",
+    "@google/generative-ai": "^0.24.1",
+    "@shoelace-style/shoelace": "^2.20.1",
+    "@types/diff-match-patch": "^1.0.36",
+    "diff-match-patch": "^1.0.5",
+    "ollama": "^0.6.3",
+    "openai": "^6.9.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-error-boundary": "^6.0.0"
+  }
 }
