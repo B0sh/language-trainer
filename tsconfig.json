@@ -1,20 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ESNext",
     "allowJs": true,
-    "module": "commonjs",
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "sourceMap": true,
     "baseUrl": ".",
     "outDir": "dist",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "jsx": "react",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
   },
   "include": ["src/**/*"]
 }
