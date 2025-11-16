@@ -12,6 +12,7 @@ import { BrowserProvider } from "./browser/BrowserProvider";
 import { OpenAIProvider } from "./openai/OpenAIProvider";
 import { GoogleProvider } from "./google/GoogleProvider";
 import { LlamaProvider } from "./llama/LlamaProvider";
+import { OpenRouterProvider } from "./openrouter/OpenRouterProvider";
 import { aiRequestDB } from "./db";
 
 type AiProviderFactory = new (...args: any[]) => AIProvider;
@@ -28,6 +29,7 @@ export class AIProviderRegistry {
         this.registerProvider("openai", OpenAIProvider);
         this.registerProvider("google", GoogleProvider);
         this.registerProvider("llama", LlamaProvider);
+        this.registerProvider("openrouter", OpenRouterProvider);
     }
 
     static registerProvider(id: string, providerClass: AiProviderFactory) {

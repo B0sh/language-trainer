@@ -30,6 +30,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
         openai: { apiKey: "", organization: "" },
         google: { apiKey: "" },
         llama: { model: "" },
+        openrouter: { apiKey: "", model: "google/gemini-2.5-flash" },
     },
     appLanguage: "en-US",
     targetLanguage: "en",

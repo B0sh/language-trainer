@@ -64,9 +64,6 @@ export const AiLog: React.FC<Props> = ({ settings }) => {
                 </SlBreadcrumb>
                 {!selectedLog && (
                     <div className="ai-log-actions">
-                        <SlButton onClick={fetchLogs} size="small">
-                            Refresh
-                        </SlButton>
                         <SlButton onClick={() => setShowConfirmDialog(true)} size="small" variant="danger">
                             Wipe Logs
                         </SlButton>

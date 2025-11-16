@@ -11,6 +11,7 @@ import { AIProvider } from "../../ai/interfaces";
 import { LlamaSettings } from "./LlamaSettings";
 import { GoogleSettings } from "./GoogleSettings";
 import { OpenAISettings } from "./OpenAISettings";
+import { OpenRouterSettings } from "./OpenRouterSettings";
 
 interface AIProviderSettingsProps {
     settings: AppSettings;
@@ -78,7 +79,7 @@ export const AIProviderSettings: React.FC<AIProviderSettingsProps> = ({ settings
                     ))}
             </SlSelect>
 
-            <SlSelect
+            {/*<SlSelect
                 label="Speech-to-Text Provider"
                 align-right
                 value={settings.stt}
@@ -91,7 +92,8 @@ export const AIProviderSettings: React.FC<AIProviderSettingsProps> = ({ settings
                             {p.name}
                         </SlOption>
                     ))}
-            </SlSelect>
+            </SlSelect>*/}
+
             <SlSelect
                 label="LLM Provider"
                 align-right
@@ -107,24 +109,31 @@ export const AIProviderSettings: React.FC<AIProviderSettingsProps> = ({ settings
                     ))}
             </SlSelect>
 
-            {settings.tts === "openai" || settings.stt === "openai" || settings.llm === "openai" ? (
+            {settings.tts === "openai" || settings.llm === "openai" ? (
                 <>
                     <SlDivider />
                     <OpenAISettings settings={settings} onSettingsChange={onSettingsChange} />
                 </>
             ) : null}
 
-            {settings.tts === "google" || settings.stt === "google" || settings.llm === "google" ? (
+            {settings.tts === "google" || settings.llm === "google" ? (
                 <>
                     <SlDivider />
                     <GoogleSettings settings={settings} onSettingsChange={onSettingsChange} />
                 </>
             ) : null}
 
-            {settings.tts === "llama" || settings.stt === "llama" || settings.llm === "llama" ? (
+            {settings.tts === "llama" || settings.llm === "llama" ? (
                 <>
                     <SlDivider />
                     <LlamaSettings settings={settings} onSettingsChange={onSettingsChange} />
+                </>
+            ) : null}
+
+            {settings.tts === "openrouter" || settings.llm === "openrouter" ? (
+                <>
+                    <SlDivider />
+                    <OpenRouterSettings settings={settings} onSettingsChange={onSettingsChange} />
                 </>
             ) : null}
         </div>

@@ -1,16 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "outDir": "dist",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "jsx": "react",
-  },
-  "include": ["src/**/*"]
+    "compilerOptions": {
+        "target": "ESNext",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "noImplicitAny": false, //TODO: enable
+        "sourceMap": true,
+        "baseUrl": ".",
+        "outDir": "dist",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "jsx": "react"
+    },
+    "include": ["src/**/*"]
 }
