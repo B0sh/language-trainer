@@ -19,11 +19,19 @@ export interface SpeechToTextResult {
     metadata?: Record<string, any>;
 }
 
+export interface JSONSchema {
+    type: "object";
+    properties: Record<string, any>;
+    required?: string[];
+    additionalProperties?: boolean;
+}
+
 export interface LLMRequest {
     prompt: string;
     temperature?: number;
     model?: string;
     format?: "json" | "text";
+    jsonSchema?: JSONSchema;
 }
 
 export interface LLMResult {
@@ -36,6 +44,7 @@ export interface LLMChatRequest {
     messages: LLMChatMessage[];
     temperature?: number;
     model?: string;
+    jsonSchema?: JSONSchema;
 }
 
 export interface LLMChatMessage {

@@ -1,4 +1,4 @@
-import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult } from "../interfaces";
+import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult, JSONSchema } from "../interfaces";
 
 export interface WaldensWorldConfig {
     baseURL?: string;
@@ -79,11 +79,22 @@ export class WaldensWorldProvider extends AIProvider {
         const startTime = performance.now();
 
         const messages = [{ role: "user", content: request.prompt }];
-        const requestData = {
+        const requestData: any = {
             model: request.model,
             messages: messages,
             temperature: request.temperature,
         };
+
+        if (request.jsonSchema) {
+            requestData.response_format = {
+                type: "json_schema",
+                json_schema: {
+                    name: "structured_response",
+                    schema: request.jsonSchema,
+                    strict: true
+                }
+            };
+        }
 
         const completion: WaldensWorldChatCompletion = await this.makeRequest('/chat/completions', requestData);
         const endTime = performance.now();
@@ -104,11 +115,22 @@ export class WaldensWorldProvider extends AIProvider {
     async llmChat(request: LLMChatRequest): Promise<LLMChatResult> {
         const startTime = performance.now();
 
-        const requestData = {
+        const requestData: any = {
             model: request.model,
             messages: request.messages,
             temperature: request.temperature,
         };
+
+        if (request.jsonSchema) {
+            requestData.response_format = {
+                type: "json_schema",
+                json_schema: {
+                    name: "structured_response",
+                    schema: request.jsonSchema,
+                    strict: true
+                }
+            };
+        }
 
         const completion: WaldensWorldChatCompletion = await this.makeRequest('/chat/completions', requestData);
         const endTime = performance.now();

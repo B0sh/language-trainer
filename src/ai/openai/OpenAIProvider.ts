@@ -1,5 +1,5 @@
 import { ChatCompletion, ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult } from "../interfaces";
+import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult, JSONSchema } from "../interfaces";
 import OpenAI from "openai";
 
 export interface OpenAIConfig {
@@ -67,11 +67,25 @@ export class OpenAIProvider extends AIProvider {
             throw new Error("OpenAI API client is not initialized");
         }
 
+        const requestData: any = {
+            model: request.model || "gpt-4o-mini",
+            messages: [{ role: "user", content: request.prompt }],
+        };
+
+        // Add structured output if JSON schema is provided
+        if (request.jsonSchema) {
+            requestData.response_format = {
+                type: "json_schema",
+                json_schema: {
+                    name: "structured_response",
+                    schema: request.jsonSchema,
+                    strict: true
+                }
+            };
+        }
+
         const completion: ChatCompletion = await this.openai.chat.completions.create(
-            {
-                model: request.model || "gpt-4o-mini",
-                messages: [{ role: "user", content: request.prompt }],
-            },
+            requestData,
             {
                 stream: false,
             }
@@ -102,12 +116,26 @@ export class OpenAIProvider extends AIProvider {
             throw new Error("OpenAI API client is not initialized");
         }
 
+        const requestData: any = {
+            model: request.model || "gpt-4o-mini",
+            messages: request.messages,
+            temperature: request.temperature,
+        };
+
+        // Add structured output if JSON schema is provided
+        if (request.jsonSchema) {
+            requestData.response_format = {
+                type: "json_schema",
+                json_schema: {
+                    name: "structured_response",
+                    schema: request.jsonSchema,
+                    strict: true
+                }
+            };
+        }
+
         const completion = await this.openai.chat.completions.create(
-            {
-                model: request.model || "gpt-4o-mini",
-                messages: request.messages,
-                temperature: request.temperature,
-            },
+            requestData,
             {
                 stream: false,
             }

@@ -1,4 +1,4 @@
-import { LLMRequest } from "../interfaces";
+import { JSONSchema, LLMRequest } from "../interfaces";
 import { TargetLanguageLevel } from "../../models/app-settings";
 
 export const PROMPT_COMP_SENTENCE = function (
@@ -27,7 +27,7 @@ Do not include any translations.`,
 export const PROMPT_COMP_VALIDATE = function (language: string, sentence: string, input: string): LLMRequest {
     return {
         prompt: `Grade the result of a language comprehension question.
-        
+
 Given the following sentences in ${language}:
 ${sentence}
 
@@ -41,5 +41,22 @@ Respond using JSON format. The JSON format is as follows:
 }`,
         temperature: 0,
         format: "json",
+        jsonSchema: COMPREHENSION_RESPONSE_SCHEMA,
     };
+};
+
+const COMPREHENSION_RESPONSE_SCHEMA: JSONSchema = {
+    type: "object",
+    properties: {
+        valid: {
+            type: "boolean",
+            description: "Whether the user's response shows comprehension of the text"
+        },
+        explanation: {
+            type: "string",
+            description: "Explanation of why the response is valid or invalid"
+        }
+    },
+    required: ["valid", "explanation"],
+    additionalProperties: false
 };

@@ -48,7 +48,7 @@ app.get('/health', (req, res) => {
 
 app.post('/api/v1/chat/completions', async (req, res) => {
     try {
-        const { messages, temperature, ...otherParams } = req.body;
+        const { messages, temperature, response_format, } = req.body;
 
         if (!messages || !Array.isArray(messages)) {
             return res.status(400).json({
@@ -60,8 +60,11 @@ app.post('/api/v1/chat/completions', async (req, res) => {
             model: OPENROUTER_MODEL,
             messages,
             temperature: temperature || 0.7,
-            ...otherParams
         };
+
+        if (response_format) {
+            openRouterRequest.response_format = response_format;
+        }
 
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',

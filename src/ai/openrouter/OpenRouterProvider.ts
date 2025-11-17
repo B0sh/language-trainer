@@ -1,4 +1,4 @@
-import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult } from "../interfaces";
+import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult, JSONSchema } from "../interfaces";
 
 export interface OpenRouterConfig {
     apiKey: string;
@@ -89,11 +89,22 @@ export class OpenRouterProvider extends AIProvider {
         }
 
         const messages = [{ role: "user", content: request.prompt }];
-        const requestData = {
+        const requestData: any = {
             model: request.model || this.model,
             messages: messages,
             temperature: request.temperature,
         };
+
+        if (request.jsonSchema) {
+            requestData.response_format = {
+                type: "json_schema",
+                json_schema: {
+                    name: "structured_response",
+                    schema: request.jsonSchema,
+                    strict: true
+                }
+            };
+        }
 
         const completion: OpenRouterChatCompletion = await this.makeRequest('/chat/completions', requestData);
         const endTime = performance.now();
@@ -118,7 +129,7 @@ export class OpenRouterProvider extends AIProvider {
             throw new Error(validation);
         }
 
-        const requestData = {
+        const requestData: any = {
             model: request.model || this.model,
             messages: request.messages,
             temperature: request.temperature,

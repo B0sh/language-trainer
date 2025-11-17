@@ -1,5 +1,5 @@
 import { TargetLanguageLevel } from "../../models/app-settings";
-import { LLMChatMessage, LLMRequest } from "../interfaces";
+import { JSONSchema, LLMChatMessage, LLMRequest } from "../interfaces";
 
 export const SYSTEM_PROMPT_CONVERSATION_STARTER = function (
     language: string,
@@ -54,17 +54,17 @@ export const PROMPT_CONVERSATION_ANALYSIS = function (language: string, history:
 
     return {
         prompt: `Analyze the following conversation in the ${language} language and give a feedback in JSON format.
-        
+
 Only analyze the content of the user's messages. Do not analyze the content of the AI's messages.
 
 ${messages}
 
 ----------------------
 
-Corrections should be about mistakes in the language used by the user, such as grammar, spelling, word choice, etc. Do not make corrections about the content or accuracy of the user's comments. 
+Corrections should be about mistakes in the language used by the user, such as grammar, spelling, word choice, etc. Do not make corrections about the content or accuracy of the user's comments.
 
 Do not make trivial corrections. Do not try to correct the users level of politeness, match your corrections to the intent of the user. If you have no suggestions to make, set noFeedback to true.
-        
+
 The JSON format is as follows:
 {
     "noFeedback": boolean,
@@ -77,5 +77,45 @@ The JSON format is as follows:
 }`,
         temperature: 0.5,
         format: "json",
+        jsonSchema: CONVERSATION_ANALYSIS_SCHEMA,
     };
 };
+
+const CONVERSATION_ANALYSIS_SCHEMA: JSONSchema = {
+    type: "object",
+    properties: {
+        noFeedback: {
+            type: "boolean",
+            description: "True if there are no corrections to suggest"
+        },
+        corrections: {
+            type: "array",
+            description: "Array of corrections for user messages",
+            items: {
+                type: "object",
+                properties: {
+                    messageIndex: {
+                        type: "number",
+                        description: "Index of the message being corrected"
+                    },
+                    original: {
+                        type: "string",
+                        description: "The original text that needs correction"
+                    },
+                    suggestedText: {
+                        type: "string",
+                        description: "The suggested corrected text"
+                    },
+                    explanation: {
+                        type: "string",
+                        description: "Explanation of why this correction is suggested"
+                    }
+                },
+                required: ["messageIndex", "original", "suggestedText", "explanation"],
+                additionalProperties: false
+            }
+        }
+    },
+    required: ["noFeedback"],
+    additionalProperties: false
+}

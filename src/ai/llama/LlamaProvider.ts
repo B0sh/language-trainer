@@ -1,4 +1,4 @@
-import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult } from "../interfaces";
+import { AIProvider, AICapabilities, LLMRequest, LLMResult, LLMChatRequest, LLMChatResult, JSONSchema } from "../interfaces";
 // https://github.com/ollama/ollama-js/issues/151
 // must be manually imported from dist file because of upstream issue with ollama bundling
 import ollama, { ChatRequest, ChatResponse, ListResponse, Message, ModelResponse } from "ollama/dist/browser.cjs";
@@ -53,7 +53,7 @@ export class LlamaProvider extends AIProvider {
             },
         };
 
-        if (request.format == "json") {
+        if (request.format == "json" || request.jsonSchema) {
             dto.format = "json";
         }
 
@@ -80,6 +80,10 @@ export class LlamaProvider extends AIProvider {
                 temperature: request.temperature ?? 0.7,
             },
         };
+
+        if (request.jsonSchema) {
+            dto.format = "json";
+        }
 
         const response: ChatResponse = await ollama.chat(dto);
 

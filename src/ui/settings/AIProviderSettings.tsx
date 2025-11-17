@@ -31,7 +31,7 @@ export const AIProviderSettings: React.FC<AIProviderSettingsProps> = ({ settings
 
     const active: AIProvider[] = [
         AIProviderRegistry.getActiveProvider("tts"),
-        AIProviderRegistry.getActiveProvider("stt"),
+        // AIProviderRegistry.getActiveProvider("stt"),
         AIProviderRegistry.getActiveProvider("llm"),
     ];
 
