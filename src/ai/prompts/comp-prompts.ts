@@ -34,7 +34,7 @@ ${sentence}
 Does the following statement show that the user had some comprehension of the above text? The statement may be brief and does not need to be very detailed. The statement is:
 ${input}
 
-Repsond using JSON format. The JSON format is as follows:
+Respond using JSON format. The JSON format is as follows:
 {
     "valid": boolean,
     "explanation": string
