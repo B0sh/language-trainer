@@ -7,14 +7,13 @@ import {
   CalendarDaysIcon,
   HashIcon,
   HomeIcon,
-  ListIcon,
   MenuIcon,
   MicIcon,
   MonitorIcon,
   MoonIcon,
   SettingsIcon,
-  SparklesIcon,
   SunIcon,
+  UserIcon,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -45,6 +44,9 @@ import {
   type MenuId,
   type MigratedUserSettings,
 } from "@/lib/web-migration"
+import { ComprehensionTrainerMigration } from "@/components/migration/trainers/comprehension-trainer-migration"
+import { DateTrainerMigration } from "@/components/migration/trainers/date-trainer-migration"
+import { NumberTrainerMigration } from "@/components/migration/trainers/number-trainer-migration"
 
 const MENU_STORAGE_KEY = "selectedMenu"
 const SETTINGS_STORAGE_KEY = "next.migratedSettings"
@@ -76,12 +78,11 @@ const THEME_OPTIONS = [
 const menuIconById: Record<MenuId, LucideIcon> = {
   home: HomeIcon,
   speaking: MicIcon,
+  name: UserIcon,
   comprehension: BookOpenIcon,
   date: CalendarDaysIcon,
   number: HashIcon,
   settings: SettingsIcon,
-  "ai-settings": SparklesIcon,
-  "ai-logs": ListIcon,
 }
 
 function applyTheme(theme: MigratedUserSettings["theme"]) {
@@ -193,13 +194,7 @@ export function LanguageTrainerMigrationShell() {
             <p className="truncate text-sm font-semibold">
               Walden&apos;s AI Language Trainer
             </p>
-            <p className="truncate text-xs text-muted-foreground">
-              Migration target: <code>next/*</code>
-            </p>
           </div>
-          <Badge variant="secondary" className="ml-auto hidden sm:inline-flex">
-            Phase 0
-          </Badge>
           <Select
             items={THEME_OPTIONS}
             value={settings.theme}
@@ -210,7 +205,7 @@ export function LanguageTrainerMigrationShell() {
               }))
             }
           >
-            <SelectTrigger aria-label="Theme" className="w-28" size="sm">
+            <SelectTrigger aria-label="Theme" className="ml-auto w-28" size="sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -281,11 +276,6 @@ export function LanguageTrainerMigrationShell() {
                 >
                   <Icon />
                   {item.label}
-                  {item.status === "removed" ? (
-                    <Badge variant="destructive" className="ml-auto">
-                      removed
-                    </Badge>
-                  ) : null}
                 </Button>
               )
             })}
@@ -301,22 +291,26 @@ export function LanguageTrainerMigrationShell() {
               onReset={() => setSettings(DEFAULT_MIGRATED_SETTINGS)}
             />
           ) : null}
-          {selectedMenu === "ai-settings" ? (
-            <RemovedScreen
-              title="AI Provider Settings Removed"
-              description="Per migration spec, end-user provider selection is no longer in product scope."
+          {selectedMenu === "number" ? (
+            <NumberTrainerMigration
+              settings={settings}
+              onSettingsChange={(nextSettings) => setSettings(nextSettings)}
             />
           ) : null}
-          {selectedMenu === "ai-logs" ? (
-            <RemovedScreen
-              title="AI Logs Screen Removed"
-              description="AI logs are no longer part of the initial user-facing product scope."
+          {selectedMenu === "date" ? (
+            <DateTrainerMigration
+              settings={settings}
+              onSettingsChange={(nextSettings) => setSettings(nextSettings)}
             />
+          ) : null}
+          {selectedMenu === "comprehension" ? (
+            <ComprehensionTrainerMigration settings={settings} />
           ) : null}
           {selectedMenu !== "home" &&
           selectedMenu !== "settings" &&
-          selectedMenu !== "ai-settings" &&
-          selectedMenu !== "ai-logs" ? (
+          selectedMenu !== "number" &&
+          selectedMenu !== "date" &&
+          selectedMenu !== "comprehension" ? (
             <TrainerPlaceholder menuId={selectedMenu} />
           ) : null}
 
@@ -501,7 +495,11 @@ function SettingsScreen({
   )
 }
 
-function TrainerPlaceholder({ menuId }: { menuId: Exclude<MenuId, "home" | "settings" | "ai-settings" | "ai-logs"> }) {
+function TrainerPlaceholder({
+  menuId,
+}: {
+  menuId: Exclude<MenuId, "home" | "settings" | "number" | "date" | "comprehension">
+}) {
   const label = MIGRATION_MENU.find((item) => item.id === menuId)?.label ?? menuId
 
   return (
@@ -517,29 +515,6 @@ function TrainerPlaceholder({ menuId }: { menuId: Exclude<MenuId, "home" | "sett
         <p>1. Port trainer menu and round-flow UI from legacy `src/ui/*`.</p>
         <p>2. Move AI generation/evaluation to first-party Next API endpoints.</p>
         <p>3. Replace local-only state with authenticated server persistence.</p>
-      </CardContent>
-    </Card>
-  )
-}
-
-function RemovedScreen({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground">
-          Kept here as an explicit migration note so removed scope does not get
-          reintroduced by accident.
-        </p>
       </CardContent>
     </Card>
   )
