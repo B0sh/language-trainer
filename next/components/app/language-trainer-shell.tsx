@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
 import type { LucideIcon } from "lucide-react"
 import {
   BookOpenIcon,
@@ -44,9 +45,10 @@ import {
   type MenuId,
   type MigratedUserSettings,
 } from "@/lib/web-migration"
-import { ComprehensionTrainerMigration } from "@/components/migration/trainers/comprehension-trainer-migration"
-import { DateTrainerMigration } from "@/components/migration/trainers/date-trainer-migration"
-import { NumberTrainerMigration } from "@/components/migration/trainers/number-trainer-migration"
+import { authClient } from "@/lib/auth-client"
+import { ComprehensionTrainer } from "@/components/trainers/comprehension-trainer"
+import { DateTrainer } from "@/components/trainers/date-trainer"
+import { NumberTrainer } from "@/components/trainers/number-trainer"
 
 const MENU_STORAGE_KEY = "selectedMenu"
 const SETTINGS_STORAGE_KEY = "next.migratedSettings"
@@ -130,12 +132,15 @@ function getInitialSettings(): MigratedUserSettings {
   }
 }
 
-export function LanguageTrainerMigrationShell() {
+export function LanguageTrainerShell() {
+  const router = useRouter()
+  const { data: session } = authClient.useSession()
   const [isNavOpen, setIsNavOpen] = useState(true)
   const [selectedMenu, setSelectedMenu] = useState<MenuId>(getInitialMenu)
   const [settings, setSettings] = useState<MigratedUserSettings>(
     getInitialSettings
   )
+  const [isSigningOut, setIsSigningOut] = useState(false)
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -176,6 +181,20 @@ export function LanguageTrainerMigrationShell() {
 
   const handleMenuSelect = (menu: MenuId) => {
     setSelectedMenu((current) => (current === menu ? "home" : menu))
+  }
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true)
+
+    try {
+      const { error } = await authClient.signOut()
+      if (error) {
+        return
+      }
+      router.replace("/")
+    } finally {
+      setIsSigningOut(false)
+    }
   }
 
   return (
@@ -222,6 +241,16 @@ export function LanguageTrainerMigrationShell() {
               </SelectGroup>
             </SelectContent>
           </Select>
+          {session?.user ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void handleSignOut()}
+              disabled={isSigningOut}
+            >
+              {isSigningOut ? "Signing out..." : "Sign out"}
+            </Button>
+          ) : null}
         </div>
       </header>
 
@@ -292,19 +321,19 @@ export function LanguageTrainerMigrationShell() {
             />
           ) : null}
           {selectedMenu === "number" ? (
-            <NumberTrainerMigration
+            <NumberTrainer
               settings={settings}
               onSettingsChange={(nextSettings) => setSettings(nextSettings)}
             />
           ) : null}
           {selectedMenu === "date" ? (
-            <DateTrainerMigration
+            <DateTrainer
               settings={settings}
               onSettingsChange={(nextSettings) => setSettings(nextSettings)}
             />
           ) : null}
           {selectedMenu === "comprehension" ? (
-            <ComprehensionTrainerMigration settings={settings} />
+            <ComprehensionTrainer settings={settings} />
           ) : null}
           {selectedMenu !== "home" &&
           selectedMenu !== "settings" &&
@@ -313,10 +342,6 @@ export function LanguageTrainerMigrationShell() {
           selectedMenu !== "comprehension" ? (
             <TrainerPlaceholder menuId={selectedMenu} />
           ) : null}
-
-          <p className="mt-3 px-1 text-xs text-muted-foreground">
-            Active section: {selectedMenuItem?.label ?? "Unknown"}
-          </p>
         </main>
       </div>
     </div>
@@ -348,9 +373,6 @@ function HomeScreen() {
           from legacy <code>src/*</code> into <code>next/*</code>.
         </p>
       </CardContent>
-      <CardFooter>
-        <Badge variant="secondary">Legacy-to-Next migration in progress</Badge>
-      </CardFooter>
     </Card>
   )
 }

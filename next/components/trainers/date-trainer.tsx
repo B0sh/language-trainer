@@ -30,7 +30,7 @@ import type { MigratedUserSettings } from "@/lib/web-migration"
 type DateChallengeStatus = "active" | "correct" | "incorrect"
 type PlaybackStatus = "idle" | "loading" | "playing" | "finished"
 
-interface DateTrainerMigrationProps {
+interface DateTrainerProps {
   settings: MigratedUserSettings
   onSettingsChange: (nextSettings: MigratedUserSettings) => void
 }
@@ -88,10 +88,10 @@ function speakText({
   })
 }
 
-export function DateTrainerMigration({
+export function DateTrainer({
   settings,
   onSettingsChange,
-}: DateTrainerMigrationProps) {
+}: DateTrainerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [round, setRound] = useState<DateRoundPayload | null>(null)
   const [challengeStatus, setChallengeStatus] =

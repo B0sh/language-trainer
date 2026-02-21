@@ -1,5 +1,5 @@
-import { LanguageTrainerMigrationShell } from "@/components/migration/language-trainer-migration-shell"
+import { LanguageTrainerShell } from "@/components/app/language-trainer-shell"
 
 export default function AppPage() {
-  return <LanguageTrainerMigrationShell />
+  return <LanguageTrainerShell />
 }

@@ -26,7 +26,7 @@ import type { MigratedUserSettings } from "@/lib/web-migration"
 type NumberChallengeStatus = "active" | "correct" | "incorrect"
 type PlaybackStatus = "idle" | "loading" | "playing" | "finished"
 
-interface NumberTrainerMigrationProps {
+interface NumberTrainerProps {
   settings: MigratedUserSettings
   onSettingsChange: (nextSettings: MigratedUserSettings) => void
 }
@@ -76,10 +76,10 @@ function speakText({
   })
 }
 
-export function NumberTrainerMigration({
+export function NumberTrainer({
   settings,
   onSettingsChange,
-}: NumberTrainerMigrationProps) {
+}: NumberTrainerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentNumber, setCurrentNumber] = useState<number | null>(null)
   const [challengeStatus, setChallengeStatus] =

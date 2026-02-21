@@ -69,7 +69,7 @@ function speakText({
   })
 }
 
-export function ComprehensionTrainerMigration({ settings }: Props) {
+export function ComprehensionTrainer({ settings }: Props) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [round, setRound] = useState<ComprehensionRound | null>(null)
   const [userInput, setUserInput] = useState("")
