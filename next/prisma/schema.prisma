@@ -10,21 +10,18 @@ datasource db {
   provider = "sqlite"
 }
 
-model Experiment {
-  id  Int    @id
-  val String
-}
-
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id                   String                @id
+  name                 String
+  email                String
+  emailVerified        Boolean               @default(false)
+  image                String?
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  sessions             Session[]
+  accounts             Account[]
+  trainingSessions     TrainingSession[]
+  numberTrainingRounds NumberTrainingRound[]
 
   @@unique([email])
   @@map("user")
@@ -76,4 +73,62 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+enum TrainerType {
+  number
+  date
+  conversation
+  comprehension
+}
+
+model TrainingSession {
+  id           String                @id @default(cuid())
+  userId       String                @map("user_id")
+  trainerType  TrainerType           @map("trainer_type")
+  startedAt    DateTime              @default(now()) @map("started_at")
+  endedAt      DateTime?             @map("ended_at")
+  summary      Json?
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempts     TrainingAttempt[]
+  numberRounds NumberTrainingRound[]
+
+  @@index([userId, trainerType])
+  @@map("training_sessions")
+}
+
+model NumberTrainingRound {
+  id             String           @id @default(cuid())
+  sessionId      String           @map("session_id")
+  userId         String           @map("user_id")
+  number         Int
+  text           String
+  difficulty     String
+  targetLanguage String           @map("target_language")
+  sentenceMode   Boolean          @default(false) @map("sentence_mode")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  evaluatedAt    DateTime?        @map("evaluated_at")
+  session        TrainingSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attempt        TrainingAttempt?
+
+  @@index([sessionId, createdAt])
+  @@index([userId, createdAt])
+  @@map("number_training_rounds")
+}
+
+model TrainingAttempt {
+  id            String               @id @default(cuid())
+  sessionId     String               @map("session_id")
+  roundId       String?              @unique @map("round_id")
+  promptPayload Json                 @map("prompt_payload")
+  userInput     String               @map("user_input")
+  evaluation    Json
+  isCorrect     Boolean              @map("is_correct")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  session       TrainingSession      @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  round         NumberTrainingRound? @relation(fields: [roundId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId, createdAt])
+  @@map("training_attempts")
 }

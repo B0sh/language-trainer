@@ -15,11 +15,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  NUMBER_DIFFICULTY_CONFIGS,
-  formatSpokenText,
-  generateNumberByDifficulty,
-} from "@/lib/trainers/number"
+import { NUMBER_DIFFICULTY_CONFIGS } from "@/lib/trainers/number"
 import { cn } from "@/lib/utils"
 import type { MigratedUserSettings } from "@/lib/web-migration"
 
@@ -29,6 +25,39 @@ type PlaybackStatus = "idle" | "loading" | "playing" | "finished"
 interface NumberTrainerProps {
   settings: MigratedUserSettings
   onSettingsChange: (nextSettings: MigratedUserSettings) => void
+}
+
+interface NumberSessionStats {
+  attempts: number
+  correct: number
+  accuracy: number
+}
+
+interface NumberRoundPayload {
+  round?: {
+    id?: unknown
+    text?: unknown
+  }
+}
+
+interface NumberSessionStartPayload {
+  sessionId?: unknown
+}
+
+interface NumberSessionEndPayload {
+  summary?: {
+    attempts?: unknown
+    correct?: unknown
+    accuracy?: unknown
+  }
+}
+
+interface NumberEvaluationPayload {
+  isCorrect?: unknown
+  expectedNumber?: unknown
+  attempts?: unknown
+  correct?: unknown
+  accuracy?: unknown
 }
 
 const targetLanguageLocaleMap: Record<string, string> = {
@@ -76,18 +105,44 @@ function speakText({
   })
 }
 
+function resolveApiErrorMessage(
+  payload: unknown,
+  fallbackMessage: string
+): string {
+  if (
+    payload &&
+    typeof payload === "object" &&
+    "error" in payload &&
+    typeof payload.error === "string" &&
+    payload.error.length > 0
+  ) {
+    return payload.error
+  }
+  return fallbackMessage
+}
+
 export function NumberTrainer({
   settings,
   onSettingsChange,
 }: NumberTrainerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
+  const [currentRoundId, setCurrentRoundId] = useState<string | null>(null)
   const [currentNumber, setCurrentNumber] = useState<number | null>(null)
   const [challengeStatus, setChallengeStatus] =
     useState<NumberChallengeStatus>("active")
   const [playbackStatus, setPlaybackStatus] = useState<PlaybackStatus>("idle")
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [userInput, setUserInput] = useState("")
   const [spokenText, setSpokenText] = useState("")
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [sessionStats, setSessionStats] = useState<NumberSessionStats>({
+    attempts: 0,
+    correct: 0,
+    accuracy: 0,
+  })
+  const [lastSessionStats, setLastSessionStats] =
+    useState<NumberSessionStats | null>(null)
 
   const difficultyConfig = useMemo(
     () =>
@@ -100,33 +155,166 @@ export function NumberTrainer({
   const targetLanguageLabel =
     targetLanguageLabelMap[settings.targetLanguage] ?? settings.targetLanguage
 
-  const requestRoundFromApi = useCallback(async () => {
-    const response = await fetch("/api/trainers/number/round", {
+  const requestStartSessionFromApi = useCallback(async () => {
+    const response = await fetch("/api/trainers/number/session/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        difficulty: settings.numberTrainerDifficulty,
-        targetLanguage: settings.targetLanguage,
-        sentenceMode: settings.numberTrainerGenSentence,
-      }),
     })
 
     if (!response.ok) {
-      throw new Error(`Number round request failed: ${response.status}`)
+      let payload: unknown = null
+      try {
+        payload = await response.json()
+      } catch {
+        payload = null
+      }
+      throw new Error(
+        resolveApiErrorMessage(payload, `Start session failed: ${response.status}`)
+      )
     }
 
-    const payload = (await response.json()) as { number?: unknown; text?: unknown }
+    const payload = (await response.json()) as NumberSessionStartPayload
 
-    if (typeof payload.number !== "number" || typeof payload.text !== "string") {
-      throw new Error("Invalid number round response")
+    if (typeof payload.sessionId !== "string" || payload.sessionId.length === 0) {
+      throw new Error("Invalid session start response.")
     }
 
-    return payload
-  }, [
-    settings.numberTrainerDifficulty,
-    settings.numberTrainerGenSentence,
-    settings.targetLanguage,
-  ])
+    return payload.sessionId
+  }, [])
+
+  const requestRoundFromApi = useCallback(
+    async (nextSessionId: string) => {
+      const response = await fetch("/api/trainers/number/round", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: nextSessionId,
+          difficulty: settings.numberTrainerDifficulty,
+          targetLanguage: settings.targetLanguage,
+          sentenceMode: settings.numberTrainerGenSentence,
+        }),
+      })
+
+      if (!response.ok) {
+        let payload: unknown = null
+        try {
+          payload = await response.json()
+        } catch {
+          payload = null
+        }
+        throw new Error(
+          resolveApiErrorMessage(payload, `Number round failed: ${response.status}`)
+        )
+      }
+
+      const payload = (await response.json()) as NumberRoundPayload
+      const round = payload.round
+      if (
+        !round ||
+        typeof round.id !== "string" ||
+        typeof round.text !== "string" ||
+        round.id.length === 0 ||
+        round.text.length === 0
+      ) {
+        throw new Error("Invalid number round response.")
+      }
+
+      return {
+        id: round.id,
+        text: round.text,
+      }
+    },
+    [
+      settings.numberTrainerDifficulty,
+      settings.numberTrainerGenSentence,
+      settings.targetLanguage,
+    ]
+  )
+
+  const requestEvaluateFromApi = useCallback(
+    async (nextSessionId: string, nextRoundId: string, nextUserInput: string) => {
+      const response = await fetch("/api/trainers/number/evaluate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: nextSessionId,
+          roundId: nextRoundId,
+          userInput: nextUserInput,
+        }),
+      })
+
+      if (!response.ok) {
+        let payload: unknown = null
+        try {
+          payload = await response.json()
+        } catch {
+          payload = null
+        }
+        throw new Error(
+          resolveApiErrorMessage(payload, `Evaluate failed: ${response.status}`)
+        )
+      }
+
+      const payload = (await response.json()) as NumberEvaluationPayload
+      if (
+        typeof payload.isCorrect !== "boolean" ||
+        typeof payload.expectedNumber !== "number" ||
+        typeof payload.attempts !== "number" ||
+        typeof payload.correct !== "number" ||
+        typeof payload.accuracy !== "number"
+      ) {
+        throw new Error("Invalid number evaluation response.")
+      }
+
+      return {
+        isCorrect: payload.isCorrect,
+        expectedNumber: payload.expectedNumber,
+        stats: {
+          attempts: payload.attempts,
+          correct: payload.correct,
+          accuracy: payload.accuracy,
+        } satisfies NumberSessionStats,
+      }
+    },
+    []
+  )
+
+  const requestEndSessionFromApi = useCallback(async (nextSessionId: string) => {
+    const response = await fetch("/api/trainers/number/session/end", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId: nextSessionId }),
+    })
+
+    if (!response.ok) {
+      let payload: unknown = null
+      try {
+        payload = await response.json()
+      } catch {
+        payload = null
+      }
+      throw new Error(
+        resolveApiErrorMessage(payload, `End session failed: ${response.status}`)
+      )
+    }
+
+    const payload = (await response.json()) as NumberSessionEndPayload
+    const summary = payload.summary
+    if (
+      !summary ||
+      typeof summary.attempts !== "number" ||
+      typeof summary.correct !== "number" ||
+      typeof summary.accuracy !== "number"
+    ) {
+      throw new Error("Invalid number session summary response.")
+    }
+
+    return {
+      attempts: summary.attempts,
+      correct: summary.correct,
+      accuracy: summary.accuracy,
+    } satisfies NumberSessionStats
+  }, [])
 
   const speakCurrentNumber = useCallback(
     async (text: string) => {
@@ -152,72 +340,121 @@ export function NumberTrainer({
     [settings.targetLanguage, settings.volume]
   )
 
-  const startRound = useCallback(async () => {
+  const startRound = useCallback(async (nextSessionId: string) => {
     setErrorMessage(null)
     setPlaybackStatus("loading")
+    const payload = await requestRoundFromApi(nextSessionId)
 
-    let nextNumber: number
-    let nextText: string
-
-    try {
-      const payload = await requestRoundFromApi()
-      nextNumber = payload.number
-      nextText = payload.text
-    } catch {
-      nextNumber = generateNumberByDifficulty(settings.numberTrainerDifficulty)
-      nextText = formatSpokenText(
-        nextNumber,
-        settings.targetLanguage,
-        settings.numberTrainerGenSentence
-      )
-    }
-
-    setCurrentNumber(nextNumber)
+    setCurrentRoundId(payload.id)
+    setCurrentNumber(null)
     setChallengeStatus("active")
     setUserInput("")
-    await speakCurrentNumber(nextText)
-  }, [
-    requestRoundFromApi,
-    settings.numberTrainerDifficulty,
-    settings.numberTrainerGenSentence,
-    settings.targetLanguage,
-    speakCurrentNumber,
-  ])
+    await speakCurrentNumber(payload.text)
+  }, [requestRoundFromApi, speakCurrentNumber])
 
   const handleStart = useCallback(async () => {
-    setIsPlaying(true)
-    await startRound()
-  }, [startRound])
-
-  const handleStop = () => {
+    setErrorMessage(null)
+    setSessionStats({ attempts: 0, correct: 0, accuracy: 0 })
     setIsPlaying(false)
+    setSessionId(null)
+    setCurrentRoundId(null)
+    setCurrentNumber(null)
+    setUserInput("")
+    setChallengeStatus("active")
+    setPlaybackStatus("idle")
+    setSpokenText("")
+    let createdSessionId: string | null = null
+
+    try {
+      const nextSessionId = await requestStartSessionFromApi()
+      createdSessionId = nextSessionId
+      setSessionId(nextSessionId)
+      setIsPlaying(true)
+      await startRound(nextSessionId)
+    } catch (error) {
+      if (createdSessionId) {
+        try {
+          await requestEndSessionFromApi(createdSessionId)
+        } catch {
+          // Ignore cleanup failures while reporting the root startup error.
+        }
+      }
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to start number trainer."
+      )
+      setIsPlaying(false)
+      setSessionId(null)
+      setCurrentRoundId(null)
+    }
+  }, [requestEndSessionFromApi, requestStartSessionFromApi, startRound])
+
+  const handleStop = useCallback(async () => {
+    const nextSessionId = sessionId
+
+    setIsPlaying(false)
+    setSessionId(null)
+    setCurrentRoundId(null)
     setPlaybackStatus("idle")
     setChallengeStatus("active")
     setCurrentNumber(null)
     setUserInput("")
     setSpokenText("")
-    setErrorMessage(null)
+    setIsSubmitting(false)
+
     if (typeof window !== "undefined" && window.speechSynthesis) {
       window.speechSynthesis.cancel()
     }
-  }
 
-  const handleSubmit = () => {
-    if (currentNumber === null) {
+    if (!nextSessionId) {
       return
     }
 
-    const parsedAnswer = Number.parseInt(userInput.replace(/[^\d]/g, ""), 10)
-    const isCorrect = Number.isFinite(parsedAnswer) && parsedAnswer === currentNumber
-    setChallengeStatus(isCorrect ? "correct" : "incorrect")
-
-    if (!isCorrect) {
-      void speakCurrentNumber(spokenText)
+    try {
+      const summary = await requestEndSessionFromApi(nextSessionId)
+      setLastSessionStats(summary)
+      setSessionStats(summary)
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to end training session."
+      )
     }
-  }
+  }, [requestEndSessionFromApi, sessionId])
+
+  const handleSubmit = useCallback(async () => {
+    if (!sessionId || !currentRoundId || userInput.length === 0 || isSubmitting) {
+      return
+    }
+
+    setErrorMessage(null)
+    setIsSubmitting(true)
+
+    try {
+      const result = await requestEvaluateFromApi(sessionId, currentRoundId, userInput)
+      setCurrentNumber(result.expectedNumber)
+      setSessionStats(result.stats)
+      setChallengeStatus(result.isCorrect ? "correct" : "incorrect")
+      if (!result.isCorrect) {
+        await speakCurrentNumber(spokenText)
+      }
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "Unable to evaluate answer."
+      )
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [
+    currentRoundId,
+    isSubmitting,
+    requestEvaluateFromApi,
+    sessionId,
+    speakCurrentNumber,
+    spokenText,
+    userInput,
+  ])
 
   const handleReplayAudio = async () => {
-    if (currentNumber === null || spokenText.length === 0) {
+    if (spokenText.length === 0) {
       return
     }
     await speakCurrentNumber(spokenText)
@@ -232,28 +469,44 @@ export function NumberTrainer({
   }, [])
 
   useEffect(() => {
-    if (challengeStatus === "active") {
+    return () => {
+      if (!sessionId) {
+        return
+      }
+
+      void fetch("/api/trainers/number/session/end", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+        keepalive: true,
+      })
+    }
+  }, [sessionId])
+
+  useEffect(() => {
+    if (challengeStatus === "active" || !sessionId) {
       return
     }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault()
-        void startRound()
+        void startRound(sessionId)
       }
     }
     window.addEventListener("keydown", onKeyDown)
     return () => {
       window.removeEventListener("keydown", onKeyDown)
     }
-  }, [challengeStatus, startRound])
+  }, [challengeStatus, sessionId, startRound])
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Number Trainer</CardTitle>
         <CardDescription>
-          Migrated gameplay slice in <code>next/*</code>. Audio uses browser
-          speech synthesis until server-side TTS APIs are integrated.
+          Server-backed number rounds with persistent attempts in{" "}
+          <code>next/*</code>. Audio uses browser speech synthesis until
+          server-side TTS APIs are integrated.
         </CardDescription>
       </CardHeader>
 
@@ -325,6 +578,13 @@ export function NumberTrainer({
                     {difficultyConfig?.label ?? settings.numberTrainerDifficulty}
                   </strong>
                 </div>
+                {lastSessionStats ? (
+                  <div className="rounded-md bg-muted/50 px-3 py-2 text-xs">
+                    Last session: {lastSessionStats.correct}/
+                    {lastSessionStats.attempts} correct ({lastSessionStats.accuracy}
+                    %)
+                  </div>
+                ) : null}
               </fieldset>
             </div>
           </CardContent>
@@ -345,6 +605,8 @@ export function NumberTrainer({
               <Badge variant="secondary" className="capitalize">
                 {settings.numberTrainerDifficulty}
               </Badge>
+              <Badge variant="outline">Attempts: {sessionStats.attempts}</Badge>
+              <Badge variant="outline">Accuracy: {sessionStats.accuracy}%</Badge>
             </div>
 
             {challengeStatus === "active" ? (
@@ -362,13 +624,16 @@ export function NumberTrainer({
                   }}
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
-                      handleSubmit()
+                      void handleSubmit()
                     }
                   }}
                 />
                 <div className="flex gap-2">
-                  <Button onClick={handleSubmit} disabled={userInput.length === 0}>
-                    Submit
+                  <Button
+                    onClick={() => void handleSubmit()}
+                    disabled={userInput.length === 0 || isSubmitting}
+                  >
+                    {isSubmitting ? "Checking..." : "Submit"}
                   </Button>
                   <Button variant="outline" onClick={() => void handleReplayAudio()}>
                     Replay Audio
@@ -398,7 +663,16 @@ export function NumberTrainer({
                   <p className="text-xs text-muted-foreground">{spokenText}</p>
                 ) : null}
                 <div className="flex flex-wrap gap-2">
-                  <Button onClick={() => void startRound()}>Next Round</Button>
+                  <Button
+                    onClick={() => {
+                      if (!sessionId) {
+                        return
+                      }
+                      void startRound(sessionId)
+                    }}
+                  >
+                    Next Round
+                  </Button>
                   <Button variant="outline" onClick={() => void handleReplayAudio()}>
                     Replay Audio
                   </Button>
@@ -417,7 +691,7 @@ export function NumberTrainer({
             <p className="text-xs text-muted-foreground">
               Target language: {targetLanguageLabel}
             </p>
-            <Button variant="outline" onClick={handleStop}>
+            <Button variant="outline" onClick={() => void handleStop()}>
               Stop
             </Button>
           </CardFooter>

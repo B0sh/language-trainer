@@ -1,5 +1,5 @@
-import { LanguageTrainerShell } from "@/components/app/language-trainer-shell"
+import { HomeScreen } from "@/components/app/home-screen"
 
 export default function AppPage() {
-  return <LanguageTrainerShell />
+  return <HomeScreen />
 }

@@ -34,19 +34,57 @@ export const DEFAULT_MIGRATED_SETTINGS: MigratedUserSettings = {
 export const MIGRATION_MENU: ReadonlyArray<{
   id: MenuId
   label: string
+  href: string
   section: "trainers" | "system"
   status: "active" | "pending"
 }> = [
-  { id: "home", label: "Home", section: "trainers", status: "active" },
-  { id: "speaking", label: "Speaking", section: "trainers", status: "pending" },
-  { id: "name", label: "Name", section: "trainers", status: "pending" },
   {
-    id: "comprehension",
-    label: "Comprehension",
+    id: "home",
+    label: "Home",
+    href: "/app",
     section: "trainers",
     status: "active",
   },
-  { id: "date", label: "Date", section: "trainers", status: "active" },
-  { id: "number", label: "Number", section: "trainers", status: "active" },
-  { id: "settings", label: "Settings", section: "system", status: "active" },
+  {
+    id: "speaking",
+    label: "Speaking",
+    href: "/app/trainer/speaking",
+    section: "trainers",
+    status: "pending",
+  },
+  {
+    id: "name",
+    label: "Name",
+    href: "/app/trainer/name",
+    section: "trainers",
+    status: "pending",
+  },
+  {
+    id: "comprehension",
+    label: "Comprehension",
+    href: "/app/trainer/comprehension",
+    section: "trainers",
+    status: "active",
+  },
+  {
+    id: "date",
+    label: "Date",
+    href: "/app/trainer/date",
+    section: "trainers",
+    status: "active",
+  },
+  {
+    id: "number",
+    label: "Number",
+    href: "/app/trainer/number",
+    section: "trainers",
+    status: "active",
+  },
+  {
+    id: "settings",
+    label: "Settings",
+    href: "/app/settings",
+    section: "system",
+    status: "active",
+  },
 ]
